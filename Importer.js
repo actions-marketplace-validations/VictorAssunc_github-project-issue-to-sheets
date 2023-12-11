@@ -13,11 +13,20 @@ class Importer {
             const serviceAccountCredentials = Core.getInput(Importer.INPUT_SERVICE_ACCOUNT_JSON);
             const documentId = Core.getInput(Importer.INPUT_DOCUMENT_ID);
             const sheetName = Core.getInput(Importer.INPUT_SHEET_NAME);
+            const githubAccessToken = Core.getInput(Importer.INPUT_GITHUB_TOKEN);
             if (!serviceAccountCredentials || !documentId || !sheetName) {
                 throw new Error("🚨 Some Inputs missed. Please check project README.");
             }
+            if (!githubAccessToken) {
+                Core.warning("⚠️ GitHub Access Token is not provided.");
+            }
             Core.info("Auth with GitHub Token...");
             const octokit = new rest_1.Octokit();
+            octokit.authenticate({
+                type: "token",
+                token: githubAccessToken,
+                tokenType: "oauth"
+            });
             Core.info("Done.");
             Core.endGroup();
             Core.startGroup("📑 Getting all Issues in repository...");
@@ -132,4 +141,5 @@ Importer.LOG_BULLET_ITEM = "·️";
 Importer.INPUT_SERVICE_ACCOUNT_JSON = "google-api-service-account-credentials";
 Importer.INPUT_DOCUMENT_ID = "document-id";
 Importer.INPUT_SHEET_NAME = "sheet-name";
+Importer.INPUT_GITHUB_TOKEN = "github-access-token";
 //# sourceMappingURL=Importer.js.map

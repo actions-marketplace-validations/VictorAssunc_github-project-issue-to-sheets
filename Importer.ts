@@ -10,6 +10,7 @@ export class Importer {
     public static INPUT_SERVICE_ACCOUNT_JSON = "google-api-service-account-credentials"
     public static INPUT_DOCUMENT_ID = "document-id"
     public static INPUT_SHEET_NAME = "sheet-name"
+    public static INPUT_GITHUB_TOKEN = "github-access-token"
 
     public async start(): Promise<void> {
         try {
@@ -21,8 +22,19 @@ export class Importer {
             if (!serviceAccountCredentials || !documentId || !sheetName) {
                 throw new Error("🚨 Some Inputs missed. Please check project README.")
             }
+            
+            const githubAccessToken = Core.getInput(Importer.INPUT_GITHUB_TOKEN)
+            if (!githubAccessToken) {
+                Core.warning("⚠️ GitHub Access Token is not provided.")
+            }
+
             Core.info("Auth with GitHub Token...")
             const octokit = new Octokit()
+            octokit.authenticate({
+                type: "token",
+                token: githubAccessToken,
+                tokenType: "oauth"
+            })
             Core.info("Done.")
             Core.endGroup()
 
