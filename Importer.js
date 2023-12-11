@@ -13,10 +13,10 @@ class Importer {
             const serviceAccountCredentials = Core.getInput(Importer.INPUT_SERVICE_ACCOUNT_JSON);
             const documentId = Core.getInput(Importer.INPUT_DOCUMENT_ID);
             const sheetName = Core.getInput(Importer.INPUT_SHEET_NAME);
-            const githubAccessToken = Core.getInput(Importer.INPUT_GITHUB_TOKEN);
             if (!serviceAccountCredentials || !documentId || !sheetName) {
                 throw new Error("🚨 Some Inputs missed. Please check project README.");
             }
+            const githubAccessToken = Core.getInput(Importer.INPUT_GITHUB_TOKEN);
             if (!githubAccessToken) {
                 Core.warning("⚠️ GitHub Access Token is not provided.");
             }
